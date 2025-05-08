@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Classroom Monitor</title>
+    <style>
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+        .card {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="card">
+            <h2>Occupancy: <span id="occupancy">0</span></h2>
+        </div>
+        <div class="card">
+            <h2>Temperature: <span id="temperature">0</span>°C</h2>
+        </div>
+        <div class="card">
+            <h2>Humidity: <span id="humidity">0</span>%</h2>
+        </div>
+        <div class="card">
+            <h2>Air Quality: <span id="airQuality">0</span></h2>
+        </div>
+        <div class="card">
+            <h3>Light Control</h3>
+            <button onclick="sendCommand('light', true)">ON</button>
+            <button onclick="sendCommand('light', false)">OFF</button>
+            <label>
+                <input type="checkbox" id="lightAuto" onchange="toggleAutoMode('light')">
+                Auto Mode
+            </label>
+        </div>
+        <div class="card">
+            <h3>Fan Control</h3>
+            <button onclick="sendCommand('fan', true)">ON</button>
+            <button onclick="sendCommand('fan', false)">OFF</button>
+            <label>
+                <input type="checkbox" id="fanAuto" onchange="toggleAutoMode('fan')">
+                Auto Mode
+            </label>
+        </div>
+    </div>
+
+    <script>
+        //create new  websocket client to connect with ws server
+        const ws = new WebSocket('ws://localhost:81');
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'stateUpdate') {
+                updateDashboard(data.data);
+            }
+        };
+
+        function updateDashboard(state) {
+            document.getElementById('occupancy').textContent = state.occupancy;
+            document.getElementById('temperature').textContent = state.temperature.toFixed(1);
+            document.getElementById('humidity').textContent = state.humidity.toFixed(1);
+            document.getElementById('airQuality').textContent = state.airQuality;
+            document.getElementById('lightAuto').checked = state.lightAuto;
+            document.getElementById('fanAuto').checked = state.fanAuto;
+        }
+
+        function sendCommand(command, value) {
+            ws.send(JSON.stringify({
+                type: 'controlCommand',
+                command: command,
+                value: value
+            }));
+        }
+
+        function toggleAutoMode(device) {
+            const autoMode = document.getElementById(`${device}Auto`).checked;
+            ws.send(JSON.stringify({
+                type: 'controlCommand',
+                command: 'mode',
+                device: device,
+                value: autoMode
+            }));
+        }
+    </script>
+</body>
+</html>

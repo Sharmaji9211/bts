@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Classroom Monitor</title>
+    <style>
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+        .card {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="card">
+            <h2>Occupancy: <span id="occupancy">0</span></h2>
+        </div>
+        <div class="card">
+            <h2>Temperature: <span id="temperature">0</span>°C</h2>
+        </div>
+        <div class="card">
+            <h2>Humidity: <span id="humidity">0</span>%</h2>
+        </div>
+        <div class="card">
+            <h2>Air Quality: <span id="airQuality">0</span></h2>
+        </div>
+        <div class="card">
+            <h3>Light Control</h3>
+            <button onclick="sendCommand('light', true)">ON</button>
+            <button onclick="sendCommand('light', false)">OFF</button>
+            <label>
+                <input type="checkbox" id="lightAuto" onchange="toggleAutoMode('light')">
+                Auto Mode
+            </label>
+        </div>
+        <div class="card">
+            <h3>Fan Control</h3>
+            <button onclick="sendCommand('fan', true)">ON</button>
+            <button onclick="sendCommand('fan', false)">OFF</button>
+            <label>
+                <input type="checkbox" id="fanAuto" onchange="toggleAutoMode('fan')">
+                Auto Mode
+            </label>
+        </div>
+    </div>
+
+    <script src="ws-bts-socket-client1.js"></script>
+ 
+</body>
+</html>
