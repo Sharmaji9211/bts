@@ -284,24 +284,7 @@ void sendSensorData() {
     serializeJson(doc, jsonString);
     webSocket.sendTXT(jsonString);
    
-    //const jsonDatadoc= json.stringify(event.data);done by websocket server not here
   
-    //javascript object notation for above arduino json object which handle by client and server
-  
-    //  jsonDatadoc={
-    // "occupancy"= counter.getPeopleCount();
-    // "temperature" = counter.getTemperature();
-    // "humidity"= counter.getHumidity();
-    // "airQuality" = counter.getAirQuality();
-    // "lightState"= counter.getLightState();
-    // "fanState" = counter.getFanState();
-    // "lightAuto" = counter.lightAutoMode;
-    // "fanAuto" = counter.fanAutoMode;
-    // "timestamp" = millis();
-    // }
-// renderToUI(jsonDatadoc);
-//sendToDataBase(jsonDatadoc);
-
 }
 
 void networkTask() {
